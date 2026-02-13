@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>For Dev ❤️</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: black;
+    color: white;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+}
+
+/* INTRO SCREEN */
+.screen {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 55px;
+    padding: 30px;
+    white-space: pre-line;
+}
+
+/* POP OUT ANIMATION */
+.pop-text {
+    font-size: 65px;
+    animation: popOut 1s ease-out forwards;
+}
+
+@keyframes popOut {
+    0% {
+        transform: scale(0.2);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* MAIN SCREEN */
+.main {
+    display: none;
+    height: 100vh;
+    background: linear-gradient(to right, #ff758c, #ff7eb3);
+    position: relative;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Big Text */
+.valentine-text {
+    font-size: 60px;
+    color: white;
+    text-align: center;
+    margin-bottom: 50px;
+    z-index: 2;
+}
+
+.valentine-text span {
+    color: #ff1e56;
+}
+
+/* Buttons */
+.buttons {
+    position: relative;
+    z-index: 2;
+}
+
+button {
+    padding: 14px 26px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 12px;
+    transition: 0.3s;
+}
+
+#yesBtn {
+    background-color: #ff4d6d;
+    color: white;
+}
+
+#yesBtn:hover {
+    transform: scale(1.1);
+}
+
+#noBtn {
+    background-color: white;
+    color: black;
+    position: absolute;
+    transition: 0.08s; /* slightly faster movement */
+}
+
+.message {
+    color: white;
+    font-weight: bold;
+    display: none;
+    margin-top: 15px;
+}
+
+/* Floating Heart Outlines */
+.floating-hearts {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.floating-hearts span {
+    position: absolute;
+    color: rgba(255,255,255,0.5);
+    font-size: 30px;
+    animation: floatUp 10s linear infinite;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-10vh);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div class="screen" id="introScreen">
+    <div id="text"></div>
+</div>
+
+<!-- MAIN SCREEN -->
+<div class="main" id="mainScreen">
+
+    <div class="floating-hearts" id="heartsContainer"></div>
+
+    <h1 class="valentine-text">
+        Will you be my <span>Valentine</span>? 💘
+    </h1>
+
+    <div class="buttons">
+        <button id="yesBtn">Yes 💖</button>
+        <button id="noBtn">No 🙃</button>
+        <div class="message" id="message">
+            You got no choice, only yes 😌
+        </div>
+    </div>
+
+</div>
+
+<script>
+const textElement = document.getElementById("text");
+
+function typeText(message, speed, callback) {
+    let i = 0;
+    textElement.classList.remove("pop-text");
+    textElement.innerHTML = "";
+
+    function typing() {
+        if (i < message.length) {
+            textElement.innerHTML += message.charAt(i);
+            i++;
+            setTimeout(typing, speed);
+        } else if (callback) {
+            setTimeout(callback, 1200);
+        }
+    }
+    typing();
+}
+
+/* INTRO SEQUENCE */
+typeText("HI Dev ❤️", 100, () => {
+
+    typeText("We met on September 4, 2025\n10:03 AM", 50, () => {
+
+        typeText("You have the most infectious smile ever.", 60, () => {
+
+            textElement.innerHTML = "";
+            textElement.classList.add("pop-text");
+            textElement.innerHTML = "I've been forever with you ❤️";
+
+            setTimeout(() => {
+                document.getElementById("introScreen").style.display = "none";
+                document.getElementById("mainScreen").style.display = "flex";
+            }, 2500);
+
+        });
+
+    });
+
+});
+
+
+/* Floating Hearts Generator */
+const heartsContainer = document.getElementById("heartsContainer");
+
+function createHeart() {
+    const heart = document.createElement("span");
+    heart.innerHTML = "♡";
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (20 + Math.random() * 30) + "px";
+    heart.style.animationDuration = (6 + Math.random() * 6) + "s";
+
+    heartsContainer.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 12000);
+}
+
+setInterval(createHeart, 400);
+
+
+/* BUTTON LOGIC */
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const message = document.getElementById("message");
+
+noBtn.addEventListener("mouseover", moveButton);
+noBtn.addEventListener("click", moveButton);
+
+function moveButton() {
+    const x = Math.random() * 400;  
+    const y = Math.random() * 250;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    message.style.display = "block";
+}
+
+yesBtn.addEventListener("click", () => {
+    alert("YAYYY 💖 You made me the happiest person!");
+});
+</script>
+
+</body>
+</html>
